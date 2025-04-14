@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,7 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/hooks/use-toast";
 
 const formSchema = z.object({
   email: z.string().email(),
@@ -27,6 +28,7 @@ export default function Auth() {
   const navigate = useNavigate();
   const [error, setError] = useState<string | null>(null);
   const [isSignUp, setIsSignUp] = useState(false);
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,6 +53,10 @@ export default function Auth() {
       setError(null);
       if (isSignUp) {
         await signUpWithEmail(values.email, values.password);
+        toast({
+          title: "Account created",
+          description: "Please check your email for verification."
+        });
       } else {
         await signInWithEmail(values.email, values.password);
       }
