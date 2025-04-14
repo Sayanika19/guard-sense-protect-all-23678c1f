@@ -3,9 +3,10 @@ import { supabase } from "@/integrations/supabase/client";
 
 export async function signInWithInstagram() {
   const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'instagram',
+    provider: 'facebook',
     options: {
       redirectTo: `${window.location.origin}/auth/callback`,
+      scopes: 'instagram_basic,instagram_content_publish', // Instagram-specific scopes through Facebook OAuth
     },
   });
 

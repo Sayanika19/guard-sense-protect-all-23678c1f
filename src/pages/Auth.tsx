@@ -2,16 +2,21 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { signInWithInstagram } from "@/lib/auth";
-import { Instagram } from "lucide-react";
+import { Facebook } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useState } from "react";
 
 export default function Auth() {
   const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
 
   const handleInstagramLogin = async () => {
     try {
+      setError(null);
       await signInWithInstagram();
     } catch (error) {
       console.error('Error:', error);
+      setError('Failed to sign in. Please try again.');
     }
   };
 
@@ -23,15 +28,22 @@ export default function Auth() {
             Welcome to InstaGuard
           </h2>
           <p className="mt-2 text-sm text-gray-600">
-            Please sign in with your Instagram account
+            Please sign in with your Facebook account to access Instagram
           </p>
         </div>
+        
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+        
         <Button
           onClick={handleInstagramLogin}
           className="w-full flex items-center justify-center gap-2"
         >
-          <Instagram className="h-5 w-5" />
-          Continue with Instagram
+          <Facebook className="h-5 w-5" />
+          Continue with Facebook for Instagram
         </Button>
       </div>
     </div>
